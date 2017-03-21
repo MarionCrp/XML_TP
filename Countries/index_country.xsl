@@ -82,7 +82,9 @@
 
         <xsl:if test="r:city">
           <svg:svg width="{count(r:city) * $width + count(r:city) * 60}" height="{$height}">
-            <xsl:apply-templates select="r:city" mode="graph" />
+            <xsl:apply-templates select="r:city" mode="graph">
+              <xsl:sort select="r:population" order="descending" />
+            </xsl:apply-templates>
             <svg:line x1="0" y1="{$height div 2}" x2="{(count(r:city) * $width)*1.2}" y2="{$height div 2}" style="stroke:rgb(0,0,0);stroke-width:2" />
           </svg:svg>
           <xsl:apply-templates select="r:city" >
@@ -118,14 +120,14 @@
   </xsl:template>
 
   <xsl:template match="r:city" mode="graph">
+    <svg:text x="{$width*1.1 * position() - ($width*1.5 div 2)}" y="{(($height div 2) - r:population * 100 div ../@population) - 10 }"><xsl:value-of select="format-number(r:population * 100 div ../@population,'0.##')" />%</svg:text>
     <svg:rect x="{$width*1.1 * position() - $width}" y="{($height div 2) - r:population * 100 div ../@population }" width="{$width}" height="{r:population * 100 div ../@population }px" style="fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)" />
     <svg:text x="{($height div 2)*1.1}" y="{position() * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /></svg:text>
-    <svg:text x="{($height)*1.1}" y="{position() * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /></svg:text>
   </xsl:template>
 
   <xsl:template match="r:population">
     <xsl:value-of select="format-number(text(), '###.###', 'big-number-format')" /> habitants
-    ( <xsl:value-of select="format-number(text()*100 div ancestor::r:country/@population, '#,##%')" />)
+    ( <xsl:value-of select="format-number(text()*100 div ancestor::r:country/@population, '0.##')" />%)
   </xsl:template>
 
   <xsl:template match="r:language">
@@ -138,6 +140,3 @@
 
 
 <!-- xslproc recette2html.xsl gateau_aux_carottes.xml > resultat.html -->
-
-
-<!-- <xsl:sort select="count(r:city)" order="ascending" data-type="number" -->
