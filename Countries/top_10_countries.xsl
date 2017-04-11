@@ -8,69 +8,25 @@
   <xsl:output method="xml" />
   <xsl:variable name="width" select="50" />
   <xsl:variable name="height" select="200" />
-  <!-- <xsl:variable name="color" as="element()*">
-     <Item>warning</Item>
-     <Item>success</Item>
-     <Item>info</Item>
- </xsl:variable> -->
 
   <xsl:template match="r:countries">
     <html>
       <head>
-        <title>Les Pays</title>
+        <title>Le top 10 des pays les plus peuplés</title>
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous" />
         <link rel="stylesheet" type="text/css" href="countries.css" />
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.0/jquery.min.js"></script>
-        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
       </head>
       <body>
-        <h1> Les Pays </h1>
+        <h1> Le top 10 des pays les plus peuplés </h1>
         <div class="row">
           <div class="col-sm-4 col-lg-3 col-xs-4">
-            <ul class="nav nav-tabs">
-
-              <li role="presentation open" class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Alphabétique
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="countries_2.xml">Les 10 premiers pays</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <xsl:apply-templates select="r:country" mode="menu" >
-                    <xsl:sort select="@name" order="ascending" />
-                  </xsl:apply-templates>
-                </ul>
+            <ul class="nav nav-pills nav-stacked">
+              <li role="top_ten" class="">
+                <a href="countries.xml?top_ten=true">
+                  Top 10 des plus peuplé
+                  </a>
               </li>
-              <li role="presentation open" class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Population
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="countries_2.xml">Les 10 premiers pays</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <xsl:apply-templates select="r:country" mode="menu" >
-                    <xsl:sort select="@population" order="descending" data-type="number" />
-                  </xsl:apply-templates>
-                </ul>
-              </li>
-              <li role="presentation open" class="dropdown">
-                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Superficie
-                  <span class="caret"></span>
-                </a>
-                <ul class="dropdown-menu">
-                  <li>
-                    <a href="countries_2.xml">Les 10 premiers pays</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
-                  <xsl:apply-templates select="r:country" mode="menu" >
-                    <xsl:sort select="@area" order="descending" data-type="number" />
-                  </xsl:apply-templates>
-                </ul>
-              </li>
+              <xsl:apply-templates select="r:country" mode="menu" />
             </ul>
           </div>
           <div class="col-sm-8 col-lg-9 col-xs-8">
