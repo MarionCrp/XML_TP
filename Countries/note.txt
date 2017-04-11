@@ -1,0 +1,9 @@
+<?php
+
+$srxml = new DOMDocument();
+$srcxml->load("pays.xml");
+$srcxsl = new DOMDocument();
+$srcxsl->load('demographie.xsl');
+
+$xslt->setParameter('','order','asc');    (namespace, nom param, valeur param)
+<xsl.value.of select="$order">

@@ -26,8 +26,8 @@
                   Retour tout pays
                 </a>
               </li>
-              <xsl:for-each select="r:country">
-                <xsl:sort select="@population" order="descending" data-type="number" />
+              <xsl:for-each select="r:country/r:city">
+                <xsl:sort select="r:population" order="descending" data-type="number" />
                 <xsl:if test="not(position() > 10)">
                   <xsl:apply-templates select="." mode="menu" />
                 </xsl:if>
@@ -35,8 +35,8 @@
             </ul>
           </div>
           <div class="col-sm-8 col-lg-9 col-xs-8">
-            <xsl:for-each select="r:country">
-              <xsl:sort select="@population" order="descending" data-type="number" />
+            <xsl:for-each select="r:country/r:city">
+              <xsl:sort select="r:population" order="descending" data-type="number" />
               <xsl:if test="not(position() > 10)">
                 <xsl:apply-templates select="." mode="panel" />
               </xsl:if>
@@ -47,21 +47,21 @@
     </html>
   </xsl:template>
 
-  <xsl:template match="r:country" mode="menu">
+  <xsl:template match="r:city" mode="menu">
     <li role="presentation" class="">
       <a>
         <xsl:attribute name="href">
           #<xsl:value-of select="generate-id()"/>
         </xsl:attribute>
-        <xsl:value-of select="@name" />
+        <xsl:value-of select="r:name" />
         </a>
       </li>
   </xsl:template>
 
-  <xsl:template match="r:country" mode="panel">
+  <xsl:template match="r:city" mode="panel">
     <div id="{generate-id()}" class="panel panel-primary">
       <div class="panel-heading">
-        <h3 class="panel-title"><xsl:value-of select="@name" /></h3>
+        <h3 class="panel-title"><xsl:value-of select="r:name" /></h3>
       </div>
       <div class="panel-body">
         <table>
@@ -71,7 +71,7 @@
               </span>
             </td>
             <td>
-              <xsl:value-of select="format-number(@population, '###.###', 'big-number-format')" /> </td>
+              <xsl:value-of select="format-number(r:population, '###.###', 'big-number-format')" /> </td>
             <td> habitants </td>
           </tr>
         </table>
@@ -84,7 +84,7 @@
   <xsl:template match="r:city">
     <div id="{generate-id()}" class="panel panel-info">
       <div class="panel-heading">
-        <h3 class="panel-title"><xsl:apply-templates select="r:name"/></h3>
+        <h3 class="panel-title"><xsl:value-of select="r:name"/></h3>
       </div>
       <div class="panel-body">
         <table>
