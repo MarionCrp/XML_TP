@@ -22,15 +22,25 @@
           <div class="col-sm-4 col-lg-3 col-xs-4">
             <ul class="nav nav-pills nav-stacked">
               <li role="top_ten" class="">
-                <a href="countries.xml?top_ten=true">
-                  Top 10 des plus peuplé
-                  </a>
+                <a href="countries.xml">
+                  Retour tout pays
+                </a>
               </li>
-              <xsl:apply-templates select="r:country" mode="menu" />
+              <xsl:for-each select="r:country">
+                <xsl:sort select="@population" order="descending" data-type="number" />
+                <xsl:if test="not(position() > 10)">
+                  <xsl:apply-templates select="." mode="menu" />
+                </xsl:if>
+              </xsl:for-each>
             </ul>
           </div>
           <div class="col-sm-8 col-lg-9 col-xs-8">
-            <xsl:apply-templates select="r:country" mode="panel" />
+            <xsl:for-each select="r:country">
+              <xsl:sort select="@population" order="descending" data-type="number" />
+              <xsl:if test="not(position() > 10)">
+                <xsl:apply-templates select="." mode="panel" />
+              </xsl:if>
+            </xsl:for-each>
           </div>
         </div>
       </body>
@@ -64,41 +74,7 @@
               <xsl:value-of select="format-number(@population, '###.###', 'big-number-format')" /> </td>
             <td> habitants </td>
           </tr>
-          <tr>
-            <td>
-              <span class="glyphicon glyphicon-globe" aria-hidden="true">
-              </span>
-            </td>
-            <td> <xsl:value-of select="format-number(@area, '###.###', 'big-number-format')" /></td>
-            <td> km² </td>
-          </tr>
-        </table>
-        <hr/>
-        <xsl:if test="r:language">
-          <div class="progress">
-            <xsl:apply-templates select="r:language">
-              <xsl:sort select="@percentage" order="ascending" />
-            </xsl:apply-templates>
-            <!-- <xsl:if test="sum(r:language/@percentage) < 100"> -->
-            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{100 - sum(r:language/@percentage)}" aria-valuemin="0" aria-valuemax="100" style="width: {100 - sum(r:language/@percentage)}%">
-              <span class=""> + <xsl:value-of select="100 - sum(r:language/@percentage)" />%</span>
-            </div>
-            <!-- </xsl:if> -->
-          </div>
-          <hr/>
-        </xsl:if>
-
-        <xsl:if test="r:city">
-          <svg:svg width="{count(r:city) * $width + count(r:city) * 60}" height="{$height}">
-            <xsl:apply-templates select="r:city" mode="graph">
-              <xsl:sort select="r:population" order="descending" />
-            </xsl:apply-templates>
-            <svg:line x1="0" y1="{$height div 2}" x2="{(count(r:city) * $width)*1.2}" y2="{$height div 2}" style="stroke:rgb(0,0,0);stroke-width:2" />
-          </svg:svg>
-          <xsl:apply-templates select="r:city" >
-            <xsl:sort select="r:name" order="ascending" />
-          </xsl:apply-templates>
-        </xsl:if>
+        </table>  
       </div>
       <div class="panel-footer">
         <a href="#">Revenir en haut !</a>

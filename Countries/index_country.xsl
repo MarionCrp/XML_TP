@@ -28,7 +28,6 @@
         <div class="row">
           <div class="col-sm-4 col-lg-3 col-xs-4">
             <ul class="nav nav-tabs">
-
               <li role="presentation open" class="dropdown">
                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"> Alphabétique
                   <span class="caret"></span>
