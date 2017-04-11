@@ -22,7 +22,7 @@
           <div class="col-sm-4 col-lg-3 col-xs-4">
             <ul class="nav nav-pills nav-stacked">
               <li role="top_ten" class="">
-                <a href="countries.xml">
+                <a href="part_1.php">
                   Retour tout pays
                 </a>
               </li>
@@ -74,7 +74,7 @@
               <xsl:value-of select="format-number(@population, '###.###', 'big-number-format')" /> </td>
             <td> habitants </td>
           </tr>
-        </table>  
+        </table>
       </div>
       <div class="panel-footer">
         <a href="#">Revenir en haut !</a>

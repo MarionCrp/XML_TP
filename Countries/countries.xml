@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet type="text/xsl" role="stylesheet" href="index_country.xsl" ?>
 
 <countries xmlns="my:countries">
   <country name="Afghanistan" population="22664136" area="647500">

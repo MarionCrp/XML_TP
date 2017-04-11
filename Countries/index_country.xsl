@@ -5,14 +5,9 @@
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:svg="http://www.w3.org/2000/svg">
   <xsl:decimal-format name="big-number-format" decimal-separator=',' grouping-separator='.' />
-  <xsl:output method="xml" />
+  <xsl:output method="html" />
   <xsl:variable name="width" select="50" />
   <xsl:variable name="height" select="200" />
-  <!-- <xsl:variable name="color" as="element()*">
-     <Item>warning</Item>
-     <Item>success</Item>
-     <Item>info</Item>
- </xsl:variable> -->
 
   <xsl:template match="r:countries">
     <html>
@@ -34,7 +29,7 @@
                 </a>
                 <ul class="dropdown-menu">
                   <li>
-                    <a href="countries_2.xml">Les 10 premiers pays</a>
+                    <a href="part_2.php">Les 10 premiers pays</a>
                   </li>
                   <li role="separator" class="divider"></li>
                   <xsl:apply-templates select="r:country" mode="menu" >
