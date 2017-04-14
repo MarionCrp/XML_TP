@@ -44,7 +44,7 @@
   <xsl:template match="r:country" mode="graph">
     <xsl:if test="not(position() > 10)">
       <rect x="{$width*1.1 * position() - $width}" y="{($height div 2) - (@population div 5000000) }" width="{$width}" height="{ @population div 5000000}" style="fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)" />
-      <text x="{($height div 2)*0.1}" y="{position() * - ($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="@population"/></text>
+      <text x="{($height div 2)*0.1}" y="{position() * - ($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="format-number(@population, '###.###', 'big-number-format')"/></text>
       <text x="{($height div 2)*1.1}" y="{position() * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="@name" /></text>
     </xsl:if>
   </xsl:template>

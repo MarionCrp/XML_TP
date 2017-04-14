@@ -62,7 +62,7 @@
                 <a href="part_3.php">Les 10 premières villes</a>
               </li>
               <li>
-                <form class="form-inline" method="get" action="part_4.php">
+                <form class="form-inline" method="get" action="part_1.php">
                   <div class="form-group">
                     <div class="input-group">
                       <input type="text" class="form-control" id="country_name" name="country_name" placeholder="ex: France"/>
@@ -121,16 +121,25 @@
         </table>
         <hr/>
         <xsl:if test="r:language">
-          <div class="progress">
-            <xsl:apply-templates select="r:language">
-              <xsl:sort select="@percentage" order="ascending" />
+          <h3> Langues parlées </h3>
+          <svg width="1100" height="100">
+            <xsl:apply-templates select="r:language" mode="rect">
+              <xsl:sort select="@percentage" order="descending" data-type="number"/>
             </xsl:apply-templates>
-            <!-- <xsl:if test="sum(r:language/@percentage) < 100"> -->
-            <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="{100 - sum(r:language/@percentage)}" aria-valuemin="0" aria-valuemax="100" style="width: {100 - sum(r:language/@percentage)}%">
-              <span class=""> + <xsl:value-of select="100 - sum(r:language/@percentage)" />%</span>
-            </div>
-            <!-- </xsl:if> -->
-          </div>
+            <xsl:apply-templates select="r:language" mode="text">
+              <xsl:sort select="@percentage" order="descending" data-type="number" />
+            </xsl:apply-templates>
+            <xsl:if test="sum(r:language/@percentage) &lt; 100">
+              <rect x="{sum(r:language/@percentage)*10}" y="20" width="{1000 - sum(r:language/@percentage)*10}" height="40" fill="rgb({255 - (count(r:language) * 50)},0,0)" stroke="white" />
+              <xsl:if test="not((count(r:language) - 1) mod 2=0)">
+                <text x="{sum(r:language/@percentage)*10+10}" y="80" fill="black"> Autres</text>
+              </xsl:if>
+              <xsl:if test="(count(r:language) - 1) mod 2=0">
+                <text x="{sum(r:language/@percentage)*10+10}" y="10" fill="black"> Autres</text>
+              </xsl:if>
+              <text x="{sum(r:language/@percentage)*10+10}" y="45" fill="black"><xsl:value-of select="100 - sum(r:language/@percentage)" />% </text>
+            </xsl:if>
+          </svg>
           <hr/>
         </xsl:if>
 
@@ -184,10 +193,19 @@
     ( <xsl:value-of select="format-number(text()*100 div ancestor::r:country/@population, '0.##')" />%)
   </xsl:template>
 
-  <xsl:template match="r:language">
-    <div class="progress-bar progress-bar" role="progressbar" aria-valuenow="{@percentage}" aria-valuemin="0" aria-valuemax="100" style="width: {@percentage}%">
-      <span class=""><xsl:apply-templates select="text()" /> -   <xsl:apply-templates select="@percentage" />%</span>
-    </div>
+  <xsl:template match="r:language" mode="rect">
+    <rect x="{sum(following-sibling::*//@percentage)*10}" y="20" width="{@percentage*10}" height="40" fill="rgb({255 - (count(following-sibling::*) * 50)},0,0)" stroke="white" />
+  </xsl:template>
+
+  <xsl:template match="r:language" mode="text">
+    <!-- Pour faciliter la visibilité du nom des langues, on les affiches une fois sur deux en haut ou en bas  -->
+    <xsl:if test="position() mod 2=0">
+      <text x="{(sum(following-sibling::*//@percentage)*10)}" y="10" fill="black"><xsl:apply-templates /></text>
+    </xsl:if>
+    <xsl:if test="not(position() mod 2=0)">
+      <text x="{(sum(following-sibling::*//@percentage)*10)}" y="80" fill="black"><xsl:apply-templates /></text>
+    </xsl:if>
+    <text x="{(sum(following-sibling::*//@percentage)*10 + (@percentage*10 div 2)) - 10}" y="45" fill="black"><xsl:value-of select="@percentage" />% </text>
   </xsl:template>
 
 </xsl:stylesheet>

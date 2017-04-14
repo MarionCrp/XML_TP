@@ -50,8 +50,8 @@
     <xsl:param name="position" />
     <xsl:if test="not($position > 10)">
       <rect x="{$width*1.1 * $position - $width}" y="{($height div 2) - (r:population div 50000) }" width="{$width}" height="{ r:population div 50000}" style="fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)" />
-      <text x="{($height div 2)*0.1}" y="{$position * - ($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:population"/></text>
-      <text x="{($height div 2)*1.1}" y="{$position * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /></text>
+      <text x="{($height div 2)*0.1}" y="{$position * - ($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="format-number(r:population, '###.###', 'big-number-format')"/> hbts</text>
+      <text x="{($height div 2)*1.1}" y="{$position * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /> (<xsl:value-of select="parent::r:country/@name" />)</text>
     </xsl:if>
   </xsl:template>
 
