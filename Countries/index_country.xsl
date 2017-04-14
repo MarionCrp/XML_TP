@@ -28,13 +28,6 @@
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="part_2.php">Les 10 premiers pays</a>
-                  </li>
-                  <li>
-                    <a href="part_3.php">Les 10 premières villes</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
                   <xsl:apply-templates select="r:country" mode="menu" >
                     <xsl:sort select="@name" order="ascending" />
                   </xsl:apply-templates>
@@ -45,13 +38,6 @@
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="part_2.php">Les 10 premiers pays</a>
-                  </li>
-                  <li>
-                    <a href="part_3.php">Les 10 premières villes</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
                   <xsl:apply-templates select="r:country" mode="menu" >
                     <xsl:sort select="@population" order="descending" data-type="number" />
                   </xsl:apply-templates>
@@ -62,17 +48,30 @@
                   <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                  <li>
-                    <a href="part_2.php">Les 10 premiers pays</a>
-                  </li>
-                  <li>
-                    <a href="part_3.php">Les 10 premières villes</a>
-                  </li>
-                  <li role="separator" class="divider"></li>
                   <xsl:apply-templates select="r:country" mode="menu" >
                     <xsl:sort select="@area" order="descending" data-type="number" />
                   </xsl:apply-templates>
                 </ul>
+              </li>
+            </ul>
+            <ul class="nav nav-tabs">
+              <li>
+                <a href="part_2.php">Les 10 premiers pays</a>
+              </li>
+              <li>
+                <a href="part_3.php">Les 10 premières villes</a>
+              </li>
+              <li>
+                <form class="form-inline" method="get" action="part_4.php">
+                  <div class="form-group">
+                    <div class="input-group">
+                      <input type="text" class="form-control" id="country_name" name="country_name" placeholder="ex: France"/>
+                    </div>
+                  </div>
+                  <button type="submit" class="btn btn-default">
+                    <span class="glyphicon glyphicon-search" aria-hidden="true"></span> Rechercher
+                  </button>
+                </form>
               </li>
             </ul>
           </div>
@@ -136,12 +135,12 @@
         </xsl:if>
 
         <xsl:if test="r:city">
-          <svg:svg width="{count(r:city) * $width + count(r:city) * 60}" height="{$height}">
+          <svg width="{count(r:city) * $width + count(r:city) * 60}" height="{$height}">
             <xsl:apply-templates select="r:city" mode="graph">
               <xsl:sort select="r:population" order="descending" />
             </xsl:apply-templates>
-            <svg:line x1="0" y1="{$height div 2}" x2="{(count(r:city) * $width)*1.2}" y2="{$height div 2}" style="stroke:rgb(0,0,0);stroke-width:2" />
-          </svg:svg>
+            <line x1="0" y1="{$height div 2}" x2="{(count(r:city) * $width)*1.2}" y2="{$height div 2}" style="stroke:rgb(0,0,0);stroke-width:2" />
+          </svg>
           <xsl:apply-templates select="r:city" >
             <xsl:sort select="r:name" order="ascending" />
           </xsl:apply-templates>
@@ -175,9 +174,9 @@
   </xsl:template>
 
   <xsl:template match="r:city" mode="graph">
-    <svg:text x="{$width*1.1 * position() - ($width*1.5 div 2)}" y="{(($height div 2) - r:population * 100 div ../@population) - 10 }"><xsl:value-of select="format-number(r:population * 100 div ../@population,'0.##')" />%</svg:text>
-    <svg:rect x="{$width*1.1 * position() - $width}" y="{($height div 2) - r:population * 100 div ../@population }" width="{$width}" height="{r:population * 100 div ../@population }px" style="fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)" />
-    <svg:text x="{($height div 2)*1.1}" y="{position() * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /></svg:text>
+    <text x="{$width*1.1 * position() - ($width*1.5 div 2)}" y="{(($height div 2) - r:population * 100 div ../@population) - 10 }"><xsl:value-of select="format-number(r:population * 100 div ../@population,'0.##')" />%</text>
+    <rect x="{$width*1.1 * position() - $width}" y="{($height div 2) - r:population * 100 div ../@population }" width="{$width}" height="{r:population * 100 div ../@population }px" style="fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)" />
+    <text x="{($height div 2)*1.1}" y="{position() * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /></text>
   </xsl:template>
 
   <xsl:template match="r:population">

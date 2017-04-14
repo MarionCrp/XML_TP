@@ -7,7 +7,7 @@
   <xsl:decimal-format name="big-number-format" decimal-separator=',' grouping-separator='.' />
   <xsl:output method="xml" />
   <xsl:variable name="width" select="50" />
-  <xsl:variable name="height" select="200" />
+  <xsl:variable name="height" select="700" />
 
   <xsl:template match="r:countries">
     <html>
@@ -26,92 +26,33 @@
                   Retour tout pays
                 </a>
               </li>
-              <xsl:for-each select="r:country/r:city">
-                <xsl:sort select="r:population" order="descending" data-type="number" />
-                <xsl:if test="not(position() > 10)">
-                  <xsl:apply-templates select="." mode="menu" />
-                </xsl:if>
-              </xsl:for-each>
             </ul>
           </div>
           <div class="col-sm-8 col-lg-9 col-xs-8">
-            <xsl:for-each select="r:country/r:city">
-              <xsl:sort select="r:population" order="descending" data-type="number" />
-              <xsl:if test="not(position() > 10)">
-                <xsl:apply-templates select="." mode="panel" />
-              </xsl:if>
-            </xsl:for-each>
+            <svg width="100%" height="{$height}">
+              <line x1="0" y1="{$height div 2}" x2="{(10 * $width)*1.2}" y2="{$height div 2}" style="stroke:rgb(0,0,0);stroke-width:2" />
+              <xsl:for-each select="r:country/r:city">
+                <xsl:sort select="r:population" order="descending" data-type="number" />
+                <xsl:if test="not(position() > 10)">
+                  <xsl:apply-templates select="." mode="graph">
+                    <xsl:with-param name="position" select="position()"/>
+                  </xsl:apply-templates>
+                </xsl:if>
+              </xsl:for-each>
+            </svg>
           </div>
         </div>
       </body>
     </html>
   </xsl:template>
 
-  <xsl:template match="r:city" mode="menu">
-    <li role="presentation" class="">
-      <a>
-        <xsl:attribute name="href">
-          #<xsl:value-of select="generate-id()"/>
-        </xsl:attribute>
-        <xsl:value-of select="r:name" />
-        </a>
-      </li>
-  </xsl:template>
-
-  <xsl:template match="r:city" mode="panel">
-    <div id="{generate-id()}" class="panel panel-primary">
-      <div class="panel-heading">
-        <h3 class="panel-title"><xsl:value-of select="r:name" /></h3>
-      </div>
-      <div class="panel-body">
-        <table>
-          <tr>
-            <td>
-              <span class="glyphicon glyphicon-user" aria-hidden="true">
-              </span>
-            </td>
-            <td>
-              <xsl:value-of select="format-number(r:population, '###.###', 'big-number-format')" /> </td>
-            <td> habitants </td>
-          </tr>
-        </table>
-      </div>
-      <div class="panel-footer">
-        <a href="#">Revenir en haut !</a>
-      </div>
-    </div>
-  </xsl:template>
-  <xsl:template match="r:city">
-    <div id="{generate-id()}" class="panel panel-info">
-      <div class="panel-heading">
-        <h3 class="panel-title"><xsl:value-of select="r:name"/></h3>
-      </div>
-      <div class="panel-body">
-        <table>
-          <tr>
-            <td>
-              <span class="glyphicon glyphicon-user" aria-hidden="true">
-              </span>
-            </td>
-            <td>
-              <xsl:apply-templates select="r:population" />
-            </td>
-          </tr>
-        </table>
-        <xsl:apply-templates select="r:city" />
-      </div>
-    </div>
-  </xsl:template>
-
   <xsl:template match="r:city" mode="graph">
-    <svg:text x="{$width*1.1 * position() - ($width*1.5 div 2)}" y="{(($height div 2) - r:population * 100 div ../@population) - 10 }"><xsl:value-of select="format-number(r:population * 100 div ../@population,'0.##')" />%</svg:text>
-    <svg:rect x="{$width*1.1 * position() - $width}" y="{($height div 2) - r:population * 100 div ../@population }" width="{$width}" height="{r:population * 100 div ../@population }px" style="fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)" />
-    <svg:text x="{($height div 2)*1.1}" y="{position() * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /></svg:text>
-  </xsl:template>
-
-  <xsl:template match="r:population">
-    <xsl:value-of select="format-number(text(), '###.###', 'big-number-format')" /> habitants
-    ( <xsl:value-of select="format-number(text()*100 div ancestor::r:country/@population, '0.##')" />%)
+    <xsl:param name="position" />
+    <xsl:if test="not($position > 10)">
+      <rect x="{$width*1.1 * $position - $width}" y="{($height div 2) - (r:population div 50000) }" width="{$width}" height="{ r:population div 50000}" style="fill:rgb(255,0,0);stroke-width:1;stroke:rgb(0,0,0)" />
+      <text x="{($height div 2)*0.1}" y="{$position * - ($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:population"/></text>
+      <text x="{($height div 2)*1.1}" y="{$position * -($width*1.1) + ($width div 2)}" transform="rotate(90)" ><xsl:value-of select="r:name" /></text>
+    </xsl:if>
   </xsl:template>
 
 </xsl:stylesheet>
