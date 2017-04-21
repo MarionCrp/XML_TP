@@ -79,6 +79,7 @@
             <xsl:apply-templates select="r:country" mode="panel" />
           </div>
         </div>
+        <script type="text/javascript" src="langues.js"></script>
       </body>
     </html>
   </xsl:template>
@@ -122,15 +123,16 @@
         <hr/>
         <xsl:if test="r:language">
           <h3> Langues parlées </h3>
-          <svg width="1100" height="100">
+          <svg class="language_bar" width="1100" height="100">
             <xsl:apply-templates select="r:language" mode="rect">
               <xsl:sort select="@percentage" order="descending" data-type="number"/>
             </xsl:apply-templates>
             <xsl:apply-templates select="r:language" mode="text">
               <xsl:sort select="@percentage" order="descending" data-type="number" />
             </xsl:apply-templates>
+            <!-- Gestion du pourcentage restant pour les autres langues -->
             <xsl:if test="sum(r:language/@percentage) &lt; 100">
-              <rect x="{sum(r:language/@percentage)*10}" y="20" width="{1000 - sum(r:language/@percentage)*10}" height="40" fill="rgb({255 - (count(r:language) * 50)},0,0)" stroke="white" />
+              <rect x="{sum(r:language/@percentage)*10}" y="20" width="{1000 - sum(r:language/@percentage)*10}" height="40" fill="rgb(255,128,0)" stroke="white" />
               <xsl:if test="not((count(r:language) - 1) mod 2=0)">
                 <text x="{sum(r:language/@percentage)*10+10}" y="80" fill="black"> Autres</text>
               </xsl:if>
@@ -194,21 +196,18 @@
   </xsl:template>
 
   <xsl:template match="r:language" mode="rect">
-    <rect x="{sum(following-sibling::*//@percentage)*10}" y="20" width="{@percentage*10}" height="40" fill="rgb({255 - (count(following-sibling::*) * 50)},0,0)" stroke="white" />
+    <rect class="language_rect" x="0" y="20" width="{@percentage*10}" height="40" stroke="white" />
   </xsl:template>
 
   <xsl:template match="r:language" mode="text">
     <!-- Pour faciliter la visibilité du nom des langues, on les affiches une fois sur deux en haut ou en bas  -->
     <xsl:if test="position() mod 2=0">
-      <text x="{(sum(following-sibling::*//@percentage)*10)}" y="10" fill="black"><xsl:apply-templates /></text>
+      <text class="title" x="0" y="10" fill="black"><xsl:apply-templates /></text>
     </xsl:if>
     <xsl:if test="not(position() mod 2=0)">
-      <text x="{(sum(following-sibling::*//@percentage)*10)}" y="80" fill="black"><xsl:apply-templates /></text>
+      <text class="title" x="0" y="80" fill="black"><xsl:apply-templates /></text>
     </xsl:if>
-    <text x="{(sum(following-sibling::*//@percentage)*10 + (@percentage*10 div 2)) - 10}" y="45" fill="black"><xsl:value-of select="@percentage" />% </text>
+    <text class="percent" x="0" y="45" fill="black"><xsl:value-of select="@percentage" />% </text>
   </xsl:template>
 
 </xsl:stylesheet>
-
-
-<!-- xslproc recette2html.xsl gateau_aux_carottes.xml > resultat.html -->
